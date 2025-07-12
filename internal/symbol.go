@@ -72,6 +72,42 @@ func matchesSymbol(scipSymbol, targetSymbol string) bool {
 		return true
 	}
 
+	formattedSymbol := FormatSymbolName(scipSymbol)
+
+	// Exact match on formatted name
+	if formattedSymbol == targetSymbol {
+		return true
+	}
+
+	// Check if target matches the end of the symbol (e.g., "fetchCmd:args" matches "args")
+	if strings.HasSuffix(formattedSymbol, ":"+targetSymbol) {
+		return true
+	}
+
+	// Check if target matches just the function/variable name
+	parts := strings.Split(formattedSymbol, "/")
+	if len(parts) > 0 {
+		lastPart := parts[len(parts)-1]
+		if lastPart == targetSymbol {
+			return true
+		}
+
+		// Handle cases like "fetchCmd:args" -> match "args"
+		if strings.Contains(lastPart, ":") {
+			subParts := strings.Split(lastPart, ":")
+			for _, subPart := range subParts {
+				if subPart == targetSymbol {
+					return true
+				}
+			}
+		}
+	}
+
+	// Fuzzy matching: check if target is contained in any part
+	if strings.Contains(formattedSymbol, targetSymbol) {
+		return true
+	}
+
 	convertedTarget := convertUserSymbolToSCIP(targetSymbol)
 	return strings.Contains(scipSymbol, convertedTarget)
 }

@@ -5,8 +5,12 @@ import (
 	"log"
 	"sort"
 
-	"github.com/spf13/cobra"
 	"github.com/kuniyoshi/symbol_usage/internal"
+	"github.com/spf13/cobra"
+)
+
+var (
+	listVerbose bool
 )
 
 var listCmd = &cobra.Command{
@@ -22,11 +26,22 @@ var listCmd = &cobra.Command{
 			log.Fatalf("Failed to read SCIP index: %v", err)
 		}
 
-		symbols := internal.GetAllSymbols(index)
-		sort.Strings(symbols)
+		if listVerbose {
+			symbolsWithSCIP := internal.GetAllSymbolsVerbose(index)
+			sort.Slice(symbolsWithSCIP, func(i, j int) bool {
+				return symbolsWithSCIP[i].Formatted < symbolsWithSCIP[j].Formatted
+			})
 
-		for _, symbol := range symbols {
-			fmt.Println(symbol)
+			for _, sym := range symbolsWithSCIP {
+				fmt.Printf("%-50s => %s\n", sym.Formatted, sym.SCIP)
+			}
+		} else {
+			symbols := internal.GetAllSymbols(index)
+			sort.Strings(symbols)
+
+			for _, symbol := range symbols {
+				fmt.Println(symbol)
+			}
 		}
 	},
 	Example: `  sy list /tmp/index.scip
@@ -34,5 +49,6 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
+	listCmd.Flags().BoolVarP(&listVerbose, "verbose", "v", false, "Show verbose output with SCIP symbol names")
 	rootCmd.AddCommand(listCmd)
 }

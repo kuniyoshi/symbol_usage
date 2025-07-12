@@ -3,8 +3,12 @@ package cmd
 import (
 	"log"
 
-	"github.com/spf13/cobra"
 	"github.com/kuniyoshi/symbol_usage/internal"
+	"github.com/spf13/cobra"
+)
+
+var (
+	findVerbose bool
 )
 
 var findCmd = &cobra.Command{
@@ -21,8 +25,14 @@ var findCmd = &cobra.Command{
 			log.Fatalf("Failed to read SCIP index: %v", err)
 		}
 
-		if err := internal.DisplaySymbolUsage(index, targetSymbol); err != nil {
-			log.Fatalf("Failed to find symbol usage: %v", err)
+		if findVerbose {
+			if err := internal.DisplaySymbolUsageVerbose(index, targetSymbol); err != nil {
+				log.Fatalf("Failed to find symbol usage: %v", err)
+			}
+		} else {
+			if err := internal.DisplaySymbolUsage(index, targetSymbol); err != nil {
+				log.Fatalf("Failed to find symbol usage: %v", err)
+			}
 		}
 	},
 	Example: `  sy find /tmp/index.scip Foo.bar
@@ -30,5 +40,6 @@ var findCmd = &cobra.Command{
 }
 
 func init() {
+	findCmd.Flags().BoolVarP(&findVerbose, "verbose", "v", false, "Show verbose output with SCIP symbol names")
 	rootCmd.AddCommand(findCmd)
 }
