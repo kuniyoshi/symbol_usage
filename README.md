@@ -6,12 +6,20 @@ Symbol Usage は SCIP を使ってコードベースを読むための
 # Usage
 
 ```
-$ sy /tmp/index.scip Foo.bar
+$ sy find /tmp/index.scip Foo.bar
  Baz.main
  Baz.qux
 *    Foo.bar
          Qux.sum
-$
+
+$ sy list /tmp/index.scip
+Baz.main
+Baz.qux
+Foo.bar
+Qux.sum
+
+$ sy --help
+Symbol Usage は SCIP を使ってコードベースを読むためのプログラムです。
 ```
 
 # Specification
