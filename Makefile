@@ -12,10 +12,10 @@ staticcheck:
 	staticcheck ./...
 
 build:
-	go build -o symbol_usage main.go
+	go build -o sy .
 
 run:
 	go run main.go
 
 clean:
-	rm -f symbol_usage
+	rm -f sy
