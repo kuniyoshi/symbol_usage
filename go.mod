@@ -1,4 +1,4 @@
-module symbol_usage
+module github.com/kuniyoshi/symbol_usage
 
 go 1.24.3
 

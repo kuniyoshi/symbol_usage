@@ -1,6 +1,6 @@
 package main
 
-import "symbol_usage/cmd"
+import "github.com/kuniyoshi/symbol_usage/cmd"
 
 func main() {
 	cmd.Execute()

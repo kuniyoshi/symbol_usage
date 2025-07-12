@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/spf13/cobra"
-	"symbol_usage/internal"
+	"github.com/kuniyoshi/symbol_usage/internal"
 )
 
 var findCmd = &cobra.Command{
