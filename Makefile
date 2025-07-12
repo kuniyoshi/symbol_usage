@@ -1,0 +1,21 @@
+.PHONY: all fmt vet staticcheck build run clean
+
+all: fmt vet staticcheck build
+
+fmt:
+	go fmt ./...
+
+vet:
+	go vet ./...
+
+staticcheck:
+	staticcheck ./...
+
+build:
+	go build -o symbol_usage main.go
+
+run:
+	go run main.go
+
+clean:
+	rm -f symbol_usage
